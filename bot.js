@@ -1,4 +1,3 @@
-require('dotenv').config();
 /**
  * 💅 Nails Shop WhatsApp Bot
  * Platform: Twilio WhatsApp Sandbox (free) or Meta WhatsApp Business API
@@ -22,22 +21,22 @@ const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
 // ─── SHOP DATA ────────────────────────────────────────────────────────────────
 const SHOP = {
-  name: "Glam Nails Studio",
-  location: "Westlands, Nairobi",
-  hours: "Mon–Sat: 8am–7pm | Sun: 10am–5pm",
-  phone: "+254 700 000 000",
-  instagram: "@glamnailske",
+  name: "Sara's Nail Parlour",
+  location: "Kyua, Machakos",
+  hours: "Every day: 9:00 AM – 8:00 PM",
+  phone: "+254 708 097 314",
+  instagram: "",
 };
 
 const SERVICES = [
-  { id: 1, name: "Manicure (Classic)",        price: "KSh 500",  duration: "45 min" },
-  { id: 2, name: "Pedicure (Classic)",         price: "KSh 700",  duration: "60 min" },
-  { id: 3, name: "Gel Nails",                  price: "KSh 1,500", duration: "90 min" },
-  { id: 4, name: "Acrylic Full Set",           price: "KSh 2,000", duration: "2 hrs"  },
-  { id: 5, name: "Nail Art (per nail)",        price: "KSh 100",  duration: "varies" },
-  { id: 6, name: "Nail Removal",               price: "KSh 300",  duration: "30 min" },
-  { id: 7, name: "Manicure + Pedicure Combo",  price: "KSh 1,100", duration: "1.5 hrs" },
-  { id: 8, name: "Bridal Package",             price: "KSh 5,000", duration: "3 hrs"  },
+  { id: 1, name: "Pedicure",           price: "KSh 300",  duration: "45 min" },
+  { id: 2, name: "Manicure",           price: "KSh 250",  duration: "30 min" },
+  { id: 3, name: "Plain Gel",          price: "KSh 300",  duration: "45 min" },
+  { id: 4, name: "Builder Gel",        price: "KSh 500",  duration: "60 min" },
+  { id: 5, name: "Heart Per Nail",     price: "KSh 50",   duration: "varies" },
+  { id: 6, name: "Pedicure + Gel",     price: "KSh 500",  duration: "60 min" },
+  { id: 7, name: "Manicure + Gel",     price: "KSh 400",  duration: "45 min" },
+  { id: 8, name: "Eyebrow Shaving",    price: "KSh 50",   duration: "15 min" },
 ];
 
 // In-memory session store (use Redis or a DB in production)
@@ -85,8 +84,7 @@ function locationInfo() {
     `*${SHOP.name}*\n` +
     `${SHOP.location}\n\n` +
     `🕐 *Hours:*\n${SHOP.hours}\n\n` +
-    `📞 *Call/WhatsApp:* ${SHOP.phone}\n` +
-    `📸 *Instagram:* ${SHOP.instagram}\n\n` +
+    `📞 *Call/WhatsApp:* ${SHOP.phone}\n\n` +
     `_Reply *0* to return to the main menu._`
   );
 }
@@ -242,15 +240,15 @@ function processMessage(phone, incomingMsg) {
 // ─── WEBHOOK ENDPOINT ─────────────────────────────────────────────────────────
 app.post("/webhook", async (req, res) => {
   const incomingMsg = req.body.Body || "";
-  const from = (req.body.From || "").replace(/\s+/g, "");           // e.g. "whatsapp:+254712345678"
+  const from = req.body.From || "";           // e.g. "whatsapp:+254712345678"
   const to   = req.body.To   || TWILIO_WHATSAPP_NUMBER;
 
   console.log(`📨 Message from ${from}: ${incomingMsg}`);
 
   const reply = processMessage(from, incomingMsg);
 
-  // Send reply via Twilio  
-try {
+  // Send reply via Twilio
+  try {
     await client.messages.create({
       from: to,
       to: from,
@@ -262,7 +260,6 @@ try {
   }
 
   res.sendStatus(200);
-
 });
 
 // Health check
