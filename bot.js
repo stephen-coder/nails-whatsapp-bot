@@ -241,7 +241,6 @@ function processMessage(phone, incomingMsg) {
 
 // ─── WEBHOOK ENDPOINT ─────────────────────────────────────────────────────────
 app.post("/webhook", async (req, res) => {
-  res.sendStatus(200);
   const incomingMsg = req.body.Body || "";
   const from = (req.body.From || "").replace(/\s+/g, "");           // e.g. "whatsapp:+254712345678"
   const to   = req.body.To   || TWILIO_WHATSAPP_NUMBER;
@@ -261,6 +260,8 @@ try {
   } catch (err) {
     console.error("❌ Twilio send error:", err.message);
   }
+
+  res.sendStatus(200);
 
 });
 
