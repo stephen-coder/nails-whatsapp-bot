@@ -224,8 +224,14 @@ function processMessage(phone, incomingMsg) {
     case "booking_name": {
       session.booking.name = incomingMsg.trim();
       const confirmation = bookingConfirmation(session.booking);
-      // TODO: Save booking to your database here
       console.log(`📅 NEW BOOKING:`, session.booking);
+      // Notify shop owner
+      const bookedService = SERVICES.find((s) => s.id === session.booking.serviceId);
+      client.messages.create({
+        from: TWILIO_WHATSAPP_NUMBER,
+        to: "whatsapp:+254708097314",
+        body: `💅 *NEW BOOKING - Sara's Nail Parlour!*\n\n👤 *Name:* ${session.booking.name}\n💅 *Service:* ${bookedService.name}\n💰 *Price:* ${bookedService.price}\n📅 *Date:* ${session.booking.date}\n⏰ *Time:* ${session.booking.time}\n📞 *Customer:* ${phone.replace("whatsapp:", "")}`,
+      }).catch(err => console.error("Owner notify error:", err.message));
       session.step = "main_menu";
       session.booking = {};
       return confirmation;
