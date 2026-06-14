@@ -1,0 +1,22 @@
+{
+  "name": "nails-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot for a nails shop — bookings, services, location info",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "twilio": "^4.23.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
